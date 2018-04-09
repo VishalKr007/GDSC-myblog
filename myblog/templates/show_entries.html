@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width", initial-scale="1">
+  <meta name="description" content="myblog-an online blog webapp">
+  <meta name="author" content="Vishal Kumar">
+  <title>Welcome | MyBlog</title>
+  <link href="{{ url_for('static', filename='bootstrap.min.css') }}" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <!-- Custom fonts for this template -->
+  <link href="{{ url_for('static', filename='font-awesome.min.css') }}" rel="stylesheet" type="text/css">
+  <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+  <!-- Custom styles for this template -->
+  <link href="{{ url_for('static', filename='myblog.min.css') }}" rel="stylesheet">
+</head>
+<body>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+        <div class="container">
+          <a class="navbar-brand" href="{{ url_for('index') }}">MY BLOG</a>
+          <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            Menu
+            <i class="fa fa-bars"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+              <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('index') }}">Home</a>
+              </li>
+              <!--<li class="nav-item">
+                <a class="nav-link" href="#">About</a>
+              </li>-->
+              <li class="nav-item">
+                {% if not session.logged_in %}
+                    <a href="{{ url_for('login') }}" class="nav-link">Admin</a>
+                {% else %}
+                    <a href="{{ url_for('logout') }}" class="nav-link">Logout</a>
+                {% endif %}
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+
+        <!-- Page Header -->
+        <header class="masthead" style="background-image: url('{{ url_for('static', filename='blog1.jpg') }}')">
+          <div class="container">
+            <div class="row">
+              <div class="col-lg-8 col-md-10 mx-auto">
+                <div class="site-heading">
+                  <h1>Write Something Here!!</h1>
+                  <span class="subheading" style="color: #ffb900;">यहाँ कुछ लिखिए!!</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </header>
+        <!--content-->
+        <center>
+        {% if session.logged_in %}
+         <form action="{{ url_for('add_entry') }}" method='post' class=add_entry>
+           <dl>
+             <dt>Title:
+             <dd><input type=text size=30 name=title required=true>
+             <dt>Author:
+             <dd><input type=text size=30 name=author required=true>
+             <dt>Text:
+             <dd><textarea name=text rows=5 cols=40 required=true></textarea>
+             <dd><br>
+             <dd><button type="submit" name="submit" class="btn btn-success">post</button>
+           </dl>
+        </form>
+       {% endif %}
+     </center><hr><br>
+      {% block content %}
+      <center>
+        <div class="row">
+          <div class="col-lg-8 col-md-10 mx-auto">
+            {% for entry in entries %}
+            <div class= "menu-category">
+                <div class="thumbnail">
+                    <div class="caption">
+                        <h3 style="text-align: justify;">{{ entry.title }}</h3>
+                        <p style="text-align: justify;">{{ entry.text|safe }}</p>
+                        <p class="post-meta" style="text-align: justify;">Posted by {{ entry.author }}</p>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+               <li><em>No entries here so far</em></li>
+            {% endfor %}
+        </div>
+      </div>
+    </center>
+      {% endblock %}
+      {% block foot %}
+          {% include "footer.html" ignore missing %}
+      {% endblock %}
+        <!-- Bootstrap core JavaScript -->
+        <script src="{{ url_for('static', filename='jquery.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='popper.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='bootstrap.min.js') }}"></script>
+
+        <!-- Custom scripts for this template -->
+        <script src="{{ url_for('static', filename='myblog.min.js') }}"></script>
+      </body>
+  </html>

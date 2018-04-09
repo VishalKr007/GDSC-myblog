@@ -1,0 +1,1 @@
+from .myblog import app

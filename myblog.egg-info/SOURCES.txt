@@ -1,0 +1,8 @@
+MANIFEST.in
+myblog/__init__.py
+myblog/myblog.py
+myblog.egg-info/PKG-INFO
+myblog.egg-info/SOURCES.txt
+myblog.egg-info/dependency_links.txt
+myblog.egg-info/requires.txt
+myblog.egg-info/top_level.txt
