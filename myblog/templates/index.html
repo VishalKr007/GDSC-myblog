@@ -16,6 +16,13 @@
 
     <!-- Custom styles for this template -->
     <link href="{{ url_for('static', filename='myblog.min.css') }}" rel="stylesheet">
+
+    <style>
+      div.post { /*border: 1px solid #999;*/
+              padding: 10px 15px;
+              margin: 10px 10%%; }
+      hr.postbound { width: 50%%;}
+    </style>
   </head>
 
   <body>
@@ -64,22 +71,31 @@
           </div>
         </header><hr><br>
     {% block body %}{% endblock %}
+    {% for entry in entries %}
     <content>
+    <center>
     <div class="container">
+      <div class="post">
           <div class="row">
             <div class="col-lg-8 col-md-10 mx-auto">
-              {% for entry in entries %}
-              <div class="post-heading" style="margin-left: 10px;">
-                <h1>{{ entry.title }}</h1>
-                <h2 class="subheading" style="font-weight: 100; font-size: 24px;">{{ entry.text }}</h2>
-                <p class="post-meta">Posted by {{ entry.author }}</p>
+
+              <div class="post-heading"> <!--style="margin-left: 10px;">-->
+                <h1 style="text-align: left; font-size: 30px; color:#70b92f;">{{ entry.title }}</h1>
+                 <br>
+                <p class="post-meta" style="text-align: left;">{{ entry.time }}<br>
+                            Posted by <b>{{ entry.author }}</b></p>
+                <h2 class="subheading" style="font-weight: 100; font-size: 20px; text-align: left; line-height: 1.6;">{{ entry.text }}</h2>
+              
               </div>
-              {% endfor %}
-              <hr>
             </div>
           </div>
         </div>
+      </div>
+      <br>
+    </center>
+    <hr width="50%" style="color: #323232;">
       </content>
+      {% endfor %}
 
     {% block foot %}
        {% include "footer.html" ignore missing %}

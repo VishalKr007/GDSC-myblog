@@ -3,6 +3,7 @@ import sqlite3
 from flask import Flask, request, session, g, redirect, url_for, abort, \
      render_template, flash
 from functools import wraps
+import datetime
 
 app = Flask(__name__) # create the application instance :)
 app.config.from_object(__name__) # load config from this file , flaskr.py
@@ -64,7 +65,7 @@ def initdb_command():
 @app.route('/index')
 def index():
     db = get_db()
-    cur = db.execute('select title, text, author from entries order by id desc')
+    cur = db.execute('select title, text, author, time from entries order by id desc')
     entries = cur.fetchall()
     return render_template('index.html', entries=entries)
 
@@ -73,7 +74,7 @@ def index():
 @login_required
 def show_entries():
     db = get_db()
-    cur = db.execute('select title, text, author from entries order by id desc')
+    cur = db.execute('select title, text, author, time from entries order by id desc')
     entries = cur.fetchall()
     return render_template('show_entries.html', entries=entries)
 
@@ -83,10 +84,18 @@ def add_entry():
     if not session.get('logged_in'):
         abort(401)
     db = get_db()
-    db.execute('insert into entries (title, text, author) values(?, ?, ?)',
-                 [request.form['title'], request.form['text'], request.form['author']])
+    db.execute('insert into entries (title, text, author, time) values(?, ?, ?, ?)',
+                 [request.form['title'], request.form['text'], app.config['USERNAME'], datetime.datetime.now()])
     db.commit()
     flash('new entry successfully posted')
+    return redirect(url_for('show_entries'))
+
+@app.route('/delete_entry/<string:id>', methods=['POST'])
+@login_required
+def delete_entry(id):
+    db = get_db()
+    db.execute('delete from entries where id = %s', [id])
+    db.commit()
     return redirect(url_for('show_entries'))
 
 @app.route('/login', methods=['GET', 'POST'])

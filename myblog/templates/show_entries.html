@@ -65,8 +65,8 @@
            <dl>
              <dt>Title:
              <dd><input type=text size=30 name=title required=true>
-             <dt>Author:
-             <dd><input type=text size=30 name=author required=true>
+             <!--<dt>Author:
+             <dd><input type=text size=30 name=author required=true>-->
              <dt>Text:
              <dd><textarea name=text rows=5 cols=40 required=true></textarea>
              <dd><br>
@@ -75,17 +75,25 @@
         </form>
        {% endif %}
      </center><hr><br>
-      {% block content %}
-      <center>
+     <center>
+       <h1>Dashboard</h1>
+       <br>
+    {% block content %}
+
         <div class="row">
           <div class="col-lg-8 col-md-10 mx-auto">
             {% for entry in entries %}
             <div class= "menu-category">
                 <div class="thumbnail">
                     <div class="caption">
-                        <h3 style="text-align: justify;">{{ entry.title }}</h3>
-                        <p style="text-align: justify;">{{ entry.text|safe }}</p>
-                        <p class="post-meta" style="text-align: justify;">Posted by {{ entry.author }}</p>
+                        <h3 style="text-align: left;">{{ entry.title }}</h3>&nbsp;
+                        <!--<p style="text-align: left;"><a href="#" style="text-decoration: underline; color: blue;">Edit</a>-->
+                              <form action="{{ url_for('delete_entry', id=entry.id) }}" method="post" class="delete_entry">
+                                      <input type="hidden" name="_method" value="DELETE">
+                                      <input type="submit" value="Delete" class="btn btn-danger">
+                              </form>
+                        <p style="text-align: left;">{{ entry.text|safe }}</p>
+                        <p class="post-meta" style="text-align: left;">Posted by <b>{{ entry.author }}</b> on&nbsp; {{ entry.time }}</p>
                     </div>
                 </div>
             </div>
@@ -94,8 +102,10 @@
             {% endfor %}
         </div>
       </div>
-    </center>
+      <hr width="50%" style="color: #323232;">
+
       {% endblock %}
+    </center>
       {% block foot %}
           {% include "footer.html" ignore missing %}
       {% endblock %}
